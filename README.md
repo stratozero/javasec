@@ -114,7 +114,7 @@ The problem I want to address with this repo is to create a (really small) codeb
 that lets you commit your usual errors, but only intentionally, and that facilitate the correct usage of the resources you need.
 
 # Next to come
-I think that there are far too many things to be done for a library to remain small, but some of the useful are those:
+I think that there are far too many things to be done for a library to remain small, but some of the most useful are those:
 1. Secure Strings (to fill the gap with .NET), storing an encrypted version of a string and decrypting it only when necessary
 2. a job tokener: see below
 
