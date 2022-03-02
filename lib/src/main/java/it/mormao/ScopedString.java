@@ -1,7 +1,6 @@
 package it.mormao;
 
 import java.io.Closeable;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -115,6 +114,7 @@ public final class ScopedString implements CharSequence, Closeable, Comparable<C
 	 * @param   end     the ending index, exclusive.
 	 * @return  a newly allocated ScopedString, cut as specified
 	 */
+	@SuppressWarnings("DeprecatedIsStillUsed")
 	@Override
 	@Deprecated
 	public CharSequence subSequence(int start, int end) {
@@ -125,14 +125,14 @@ public final class ScopedString implements CharSequence, Closeable, Comparable<C
 
 	private static void checkBoundsBeginEnd(int begin, int end, int length) {
 		if (begin < 0 || begin > end || end > length) {
-			throw new StringIndexOutOfBoundsException(
+			throw new IndexOutOfBoundsException(
 					  "begin " + begin + ", end " + end + ", length " + length);
 		}
 	}
 
 	private static void checkIndex(int index, int len){
 		if(index < 0 || index >= len)
-			throw new StringIndexOutOfBoundsException("Invalid index " + index + ". Index must be in the range [0 - " + len + ']');
+			throw new IndexOutOfBoundsException("Invalid index " + index + ". Index must be in the range [0 - " + len + ']');
 	}
 
 	/* The string representation is at least 8 chars long (to prevent easy guessing of short password inadvertently logged) */
@@ -144,7 +144,9 @@ public final class ScopedString implements CharSequence, Closeable, Comparable<C
 	 */
 	@Override
 	public String toString() {
-		final char[] copy = Arrays.copyOf(content, content.length);
+		// create a new wiped version of the original
+		final char[] copy = new char[Math.max(TO_STRING_MIN_LEN, content.length)];
+		System.arraycopy(content, 0, copy, 0, content.length);
 		wiper.wipe(copy);
 		return new String(copy).intern();
 	}
@@ -185,5 +187,26 @@ public final class ScopedString implements CharSequence, Closeable, Comparable<C
 
 	private boolean isWiped(){
 		return wiped.get();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return (obj instanceof ScopedString other) &&
+		       areEquals(this, other);
+	}
+
+	public static boolean areEquals(ScopedString s1, ScopedString s2){
+		if(s1 == s2)
+			return true;
+		if(s1 == null || s2 == null)
+			return false;
+		final int len = s1.length();
+		if(len != s2.length())
+			return false;
+		for(int i = 0; i < len; i++){
+			if(s1.content[i] != s2.content[i])
+				return false;
+		}
+		return true;
 	}
 }

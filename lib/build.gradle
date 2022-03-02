@@ -8,18 +8,20 @@ repositories {
     mavenCentral()
 }
 
-var junitVersion = '5.7.2'
+
+def junitVersion = '5.7.2'
+def javaVersion = JavaVersion.VERSION_17
+
+java {
+    sourceCompatibility javaVersion
+    targetCompatibility javaVersion
+}
 
 dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
 }
 
-testing {
-    suites {
-        // Configure the built-in test suite
-        test {
-            // Use JUnit Jupiter test framework
-            useJUnitJupiter(junitVersion)
-        }
-    }
+test {
+    useJUnitPlatform()
 }

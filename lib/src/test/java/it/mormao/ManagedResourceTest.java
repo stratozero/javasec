@@ -20,4 +20,30 @@ public class ManagedResourceTest {
 		Assertions.assertFalse(Arrays.equals(pwdChars, originalBackup), "The password has not been obfuscated");
 	}
 
+	@Test
+	void testManagingSimpleResource() throws Exception {
+		final char[]
+				  pwdChars = {'p', 'a', 's', 's', 'w', 'o', 'r', 'd'},
+				  originalBackup = Arrays.copyOf(pwdChars, pwdChars.length);
+
+		ManagedResource.fromResource(ScopedString.from(pwdChars).build())
+				  .use(s -> System.out.println(String.valueOf(s.getContent())));
+
+		Assertions.assertFalse(Arrays.equals(pwdChars, originalBackup), "The password has not been obfuscated");
+	}
+
+	@Test
+	void testUseAndGet() throws Exception {
+		final char[]
+				  pwdChars = {'p', 'a', 's', 's', 'w', 'o', 'r', 'd'},
+				  originalBackup = Arrays.copyOf(pwdChars, pwdChars.length);
+
+		final String pwdValue = ManagedResource
+				  .fromResource(ScopedString.from(pwdChars).build())
+				  .useAndGet(s -> String.valueOf(s.getContent()));
+
+		Assertions.assertFalse(Arrays.equals(pwdChars, originalBackup), "The password has not been obfuscated");
+		Assertions.assertEquals(String.valueOf(originalBackup), pwdValue);
+	}
+
 }
