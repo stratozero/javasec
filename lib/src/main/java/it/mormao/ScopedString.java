@@ -38,9 +38,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *    </pre></blockquote>
  * </p>
  */
-public final class ScopedString implements Serializable, CharSequence, Closeable, Comparable<CharSequence> {
+public final class ScopedString implements CharSequence, Closeable, Comparable<CharSequence> {
 
-	private final char[] content;
+	private final transient char[] content;
 	private CharWiper wiper = DEFAULT_WIPER;
 	private final AtomicBoolean wiped = new AtomicBoolean();
 
