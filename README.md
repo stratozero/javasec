@@ -125,14 +125,14 @@ of memory and CPU.
 Some other will pretend to have the definitive solution that (every time...) will need the complete rewriting of an entire module, or worse, the entire
 service architecture.
 
-The truth everytime stands in the middle: every time you face with those problems:
+The truth everytime stands in the middle: every time you face with those problems, you end up doing the steps below
 1. Do some initialization suff (open connections, preallocate memory, etc...)
 2. collect similar tasks and group them together in some sort of "buffers" of similar tasks
 3. once you met a break condition, stop filling the buffer and submit those tasks to the slower resource, all together, like a bulk-operation to a database (**maybe** in parallel)
 4. merge the responses back to the original requests
 5. do some final operation, like resource finalization, closing connections, cleaning memory, etc...
 
-All those operations should be done in a meaningful way, so we probably neeed to define some common term before starting.
+All those operations should be done in a meaningful way, so we probably neeed to define some [common term](#common_terms_to_be_defined) before starting.
 
 I imagine that it could look something like:
 
