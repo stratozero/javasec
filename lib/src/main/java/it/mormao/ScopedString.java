@@ -67,6 +67,10 @@ public final class ScopedString implements CharSequence, Closeable, Comparable<C
 	public static Builder from(char[] original){
 		return new Builder(original);
 	}
+	
+	public static ScopedString of(char[] original){
+		return new ScopedString(original);
+	}
 
 	public static final class Builder {
 		private final ScopedString s;
@@ -140,6 +144,7 @@ public final class ScopedString implements CharSequence, Closeable, Comparable<C
 
 	/**
 	 * Return a wiped representation of the content. If you want to read the content of a ScopedString use the {@link }
+	 * This implementation deliberately violates the contract of CharSequence.toString()
 	 * @return a wiped representation of the content
 	 */
 	@Override
@@ -171,9 +176,10 @@ public final class ScopedString implements CharSequence, Closeable, Comparable<C
 			throw new IllegalStateException("The content of the other instance has yet been wiped");
 
 		final int
-				  lenA = length(),
-				  lenB = o.length(),
-				  len = Math.min(lenA, lenB);
+			lenA = length(),
+			lenB = o.length(),
+			len = Math.min(lenA, lenB);
+		
 		for(int i = 0; i < len; i++){
 			final char a = charAt(i);
 			final char b = o.charAt(i);
